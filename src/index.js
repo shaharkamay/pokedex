@@ -41,21 +41,24 @@ function renderPokemonView(pokemon) {
     const pokemonWeight = document.getElementById("pokemon-view__weight");
     pokemonWeight.textContent = "Weight: " + pokemon.weight;
     const pokemonTypes = document.getElementById("pokemon-view__types");
+    removeChildren(pokemonTypes);
     pokemonTypes.append("types: ");
-    const types = [];
     for(const type of pokemon.types) {
-        pokemonTypes.append(createElement('button', [type["type"].name], [], {}, {click: clickTypeEventHandler} ));
+        pokemonTypes.append(createElement('button', [type["type"].name], ["button"], {}, {click: clickTypeEventHandler} ));
     }
 
-    //  types.join(", ");
 }
 
-function changePokemonAngleImg(pokemon) {
+function removeChildren(elem) {
+    while(elem.firstChild) elem.removeChild(elem.firstChild);
+}
+
+function changePokemonAngleImg() {
     const pokemonImg = document.getElementById("pokemon-view__img");
-    if(pokemonImg.src === pokemon.sprites.back_default) {
-        pokemonImg.src = pokemon.sprites.front_default;
+    if(pokemonImg.src.indexOf("/back") === -1) {
+        pokemonImg.src = pokemonImg.src.replace("pokemon/", "pokemon/back/");
     } else {
-        pokemonImg.src = pokemon.sprites.back_default;
+        pokemonImg.src = pokemonImg.src.replace("pokemon/back/", "pokemon/");
     }
 }
 
@@ -65,9 +68,13 @@ function changePokemonAngleImg(pokemon) {
     const pokemon = await getPokemonByName("bulbasaur");
     renderPokemonView(pokemon);
     // filterPokemons();
-    document.querySelector(".pokemon-view__img").addEventListener("mouseover", () => {changePokemonAngleImg(pokemon)});
-    document.querySelector(".pokemon-view__img").addEventListener("mouseout", () => {changePokemonAngleImg(pokemon)});
-    document.getElementById("search__input").addEventListener("keyup", keyupSearchEventHandler);
+    document.querySelector(".pokemon-view__img").addEventListener("mouseover", changePokemonAngleImg);
+    document.querySelector(".pokemon-view__img").addEventListener("mouseout", changePokemonAngleImg);
+    const searchInput = document.getElementById("search__input");
+    searchInput.addEventListener("keyup", keyupSearchEventHandler);
+    searchInput.value = "";
+
+    document.querySelector("aside").addEventListener("click", clickPokemonPickEventHandler);
 })();
 
 function filterPokemons(query) {
@@ -75,7 +82,6 @@ function filterPokemons(query) {
     for(const pokemon of allPokemons.results) {
         if(searchByQuery(pokemon.name, query)) {
             pokemons.push(pokemon)
-            // console.log(pokemonDirect.name);
         }
     }
     return pokemons;
@@ -84,47 +90,58 @@ function searchByQuery(str, query) {
     return (str.search(new RegExp(query.replace(/\s+/, '|'))) !== -1); 
 }
 
+async function clickPokemonPickEventHandler(e) {
+    removeResultsSection();
+    const pokemonPickDiv = e.target.closest(".pokemon-pick__button");
+    if(!pokemonPickDiv) return;
+    const pokemon = await getPokemonByName(pokemonPickDiv.querySelector(".pokemon-pick__name").textContent);
+    renderPokemonView(pokemon);
+
+}
+
 function keyupSearchEventHandler(e) {
     if(!e.target.value) return;
+    if(e.key !== 'Enter') return;
 
     renderResults(filterPokemons(e.target.value));
 }
 
 async function renderResults(pokemons) {
-    
-    const main = document.querySelector("main");
-    const footer = document.querySelector("footer");
-    addOpacityToSections(null, main, footer);
-    
+    toggleLoader();
     const resultsSection = createElement('section', [], ["search__results"], {id: "search__results"});
     
-    console.log(pokemons)
     for(const pokemon of pokemons) {
         let resultDiv;
         if(pokemon["pokemon"]) {
             const img = createElement('img', [], ["result__img"], {src: await getPokemonImgByName(pokemon["pokemon"].name)});
             
             const imgDiv = createElement('div', [img], ["result__img-div"]);
-            const nameP = createElement('p', [pokemon["pokemon"].name], ["result__name"]);
-            resultDiv = createElement('div', [imgDiv, nameP], ["search__result", "row"]);
+            const nameP = createElement('p', [pokemon["pokemon"].name], ["result__name", "pokemon-pick__name"]);
+            resultDiv = createElement('div', [imgDiv, nameP], ["search__result", "row", "pokemon-pick__button"]);
         } else {
             const img = createElement('img', [], ["result__img"], {src: await getPokemonImgByName(pokemon.name)});
             
             const imgDiv = createElement('div', [img], ["result__img-div"]);
-            const nameP = createElement('p', [pokemon.name], ["result__name"]);
-            resultDiv = createElement('div', [imgDiv, nameP], ["search__result", "row"]);
+            const nameP = createElement('p', [pokemon.name], ["result__name", "pokemon-pick__name"]);
+            resultDiv = createElement('div', [imgDiv, nameP], ["search__result", "row", "pokemon-pick__button"]);
         }
         
         resultsSection.append(resultDiv);
     }
+    if(pokemons.length === 0) resultsSection.append("Pokemon Not Found!");
     
     const closeResults = createElement('button', ["X"], ["close__results"], {}, {click: removeResultsSection});
     
     
     const resultsContainer = createElement('div', [closeResults, resultsSection], ["results-container"]);
+    toggleLoader();
     
     removeResultsSection();
+    const main = document.querySelector("main");
+    const footer = document.querySelector("footer");
+    addOpacityToSections(null, main, footer);
     main.before(resultsContainer);
+    resultsSection.addEventListener("click", clickPokemonPickEventHandler);
 }
 async function clickTypeEventHandler(e) {
     const type = e.target.textContent;
@@ -173,3 +190,21 @@ function removeOpacityToSections(header = null, main = null, footer = null) {
     return element;
 }
 
+
+function toggleLoader() {
+    const div = document.getElementById("loader-div");
+
+    const header = document.querySelector("header");
+    const main = document.querySelector("main");
+    const footer = document.querySelector("footer");
+    if(div) {
+        div.remove();
+        removeOpacityToSections(header, main, footer);
+    } else {
+        const img = createElement('img', [], ["loaderImg"], {src: "../images/loading.gif"});
+        const loaderDiv = createElement("div", [img], ["loaderDiv", "results-container"], {id: "loader-div"});
+        document.body.append(loaderDiv);
+
+        addOpacityToSections(header, main, footer);
+    }
+}
