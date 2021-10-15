@@ -71,8 +71,9 @@ function changePokemonAngleImg() {
     document.querySelector(".pokemon-view__img").addEventListener("mouseover", changePokemonAngleImg);
     document.querySelector(".pokemon-view__img").addEventListener("mouseout", changePokemonAngleImg);
     const searchInput = document.getElementById("search__input");
-    searchInput.addEventListener("keyup", keyupSearchEventHandler);
+    searchInput.addEventListener("keyup", searchEventHandler);
     searchInput.value = "";
+    document.getElementById("search-button").addEventListener("click", searchEventHandler);
 
     document.querySelector("aside").addEventListener("click", clickPokemonPickEventHandler);
 })();
@@ -99,11 +100,15 @@ async function clickPokemonPickEventHandler(e) {
 
 }
 
-function keyupSearchEventHandler(e) {
-    if(!e.target.value) return;
-    if(e.key !== 'Enter') return;
+function searchEventHandler(e) {
+    const searchInput = document.getElementById("search__input");
+    if(e.target.tagName !== 'BUTTON') {
+        if(!searchInput.value) return;
+        if(e.key !== 'Enter') return;
+    }
+    
 
-    renderResults(filterPokemons(e.target.value));
+    renderResults(filterPokemons(searchInput.value));
 }
 
 async function renderResults(pokemons) {
