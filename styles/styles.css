@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+:root {
+    /* colors */
+    --color-white-100: white;
+    --clr-white-200: #f1f1f1;
+    --color-cream-200: #EAE2B7;
+    --color-mustard-400: #FCBF49;
+    --color-orange-500: #F77F00;
+    --color-red-600: #D62828;
+    --color-dark-blue-800: #003049;
+
+    /* fonts */
+    --font-title: 'Oswald', sans-serif;
+    --font-text: 'Montserrat', sans-serif;
+
+    --box-shadow: 0 0px 20px rgba(0,0,0,0.2);
+}
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+body,
+h1,
+h2,
+h3,
+ul,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    max-width: 100%;
+}
+
+body {
+    font-family: var(--font-text);
+    line-height: 1.5;
+    color: var(--color-dark-blue-800);
+}
+
+.container {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1200px;
+}
+
+header {
+    background-color: var(--color-mustard-400);
+    padding: 1em;
+    text-align: center;
+}
+h1 {
+    font-family: var(--font-title);
+}
+.search {
+
+}
+
+.results-container {
+    position: absolute;
+    /* height: 100vh; */
+    width: 100vw;
+    left: 0;
+    top: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+}
+.close__results {
+    color: red;
+    font-size: 1rem;
+    font-weight: 600;
+    z-index: 1;
+    padding: 0.5em 3em;
+}
+.search__results {
+    padding: 1em;
+    overflow: auto;
+    width: 80%;
+    max-height: 70vh;
+    max-width: 1200px;
+    background-color: var(--clr-white-200);
+    box-shadow: var(--box-shadow);
+    z-index: 1;
+}
+.search__result {
+    border-top: 1px solid var(--color-white-100);
+    padding: 0.2em;
+}
+.search__result:hover,
+.search__result:focus {
+    opacity: 0.5;
+    cursor: pointer;
+}
+.result__img-div {
+    /* background-color: white; */
+    /* overflow: hidden; */
+    height: 50px;
+    width: 50px;
+}
+/* .result__img {
+    max-width: unset;
+    height: 70px;
+    width: 70px;
+    margin: -10px 0 0 -10px;
+} */
+
+main {
+    background-color: var(--color-white-100);
+    padding: 1em;
+}
+
+aside {
+    padding: 1em;
+    overflow: auto;
+    order: 1;
+    display: flex;
+    /* justify-content: center; */
+    gap: 1em;
+    background-color: var(--clr-white-200);
+    box-shadow: var(--box-shadow);
+}
+
+.pokemon-view {
+    text-align: center;
+    padding: 1em;
+    background-color: var(--color-dark-blue-800);
+    color: var(--clr-white-200);
+    box-shadow: var(--box-shadow);
+}
+
+footer {
+    background-color: var(--color-red-600);
+    padding: 1em;
+}
+
+.opacity {
+    opacity: 0.2;
+}
+
+
+.col {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+}
