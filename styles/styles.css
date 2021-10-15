@@ -73,6 +73,12 @@ h1 {
 .search {
 
 }
+.search__input {
+    max-width: 70%;
+}
+.search__button {
+    max-width: 30%;
+}
 
 .results-container {
     position: absolute;
