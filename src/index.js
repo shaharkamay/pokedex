@@ -100,15 +100,21 @@ async function clickPokemonPickEventHandler(e) {
 
 }
 
-function searchEventHandler(e) {
+async function searchEventHandler(e) {
     const searchInput = document.getElementById("search__input");
     if(e.target.tagName !== 'BUTTON') {
         if(!searchInput.value) return;
         if(e.key !== 'Enter') return;
     }
     
-
-    renderResults(filterPokemons(searchInput.value));
+    if(isNaN(searchInput.value)) renderResults(filterPokemons(searchInput.value));
+    else {
+        await getPokemonById(searchInput.value).then((pokemon) => {
+            renderPokemonView(pokemon);
+        }, (err) => {
+            window.alert(`${err}\nPokemon Not Found!`);
+        });
+    }
 }
 
 async function renderResults(pokemons) {
@@ -206,7 +212,7 @@ function toggleLoader() {
         div.remove();
         removeOpacityToSections(header, main, footer);
     } else {
-        const img = createElement('img', [], ["loaderImg"], {src: "../images/loading.gif"});
+        const img = createElement('img', [], ["loaderImg"], {src: "./images/loading.gif"});
         const loaderDiv = createElement("div", [img], ["loaderDiv", "results-container"], {id: "loader-div"});
         document.body.append(loaderDiv);
 

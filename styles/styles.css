@@ -163,6 +163,7 @@ aside {
     background-color: var(--color-dark-blue-800);
     color: var(--clr-white-200);
     box-shadow: var(--box-shadow);
+    align-items: center;
 }
 .pokemon-view__name {
     font-family: var(--font-title);
@@ -173,17 +174,26 @@ aside {
     padding: 0.5em;
     background-color: var(--color-red-600);
     margin-bottom: 0.5em;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto 0.5em;
 }
 .pokemon-view__weight {
     font-weight: bold;
     padding: 0.5em;
     background-color: var(--color-red-600);
     margin-bottom: 0.5em;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto 0.5em;
 }
 .pokemon-view__types {
     font-weight: bold;
     padding: 0.5em;
     background-color: var(--color-red-600);
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
 }
 .pokemon-view__types * {
     margin-right: 0.2em;
