@@ -106,6 +106,7 @@ async function searchEventHandler(e) {
         if(!searchInput.value) return;
         if(e.key !== 'Enter') return;
     }
+    if(!searchInput.value) return;
     
     if(isNaN(searchInput.value)) renderResults(filterPokemons(searchInput.value));
     else {
