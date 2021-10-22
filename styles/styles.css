@@ -142,25 +142,34 @@ main {
 
 aside {
     padding: 1em;
-    overflow: auto;
     width: 100%;
     order: 1;
-    display: flex;
-    gap: 1em;
     background-color: var(--color-cream-200);
     box-shadow: var(--box-shadow);
     z-index: 0;
     text-align: center;
 }
-.pokemon-pick__button {
+.pokemon-collection {
+    padding: 1em;
+    border: 2px solid rgba(0,0,0,0.2);
+    overflow: auto;
+    display: flex;
+    gap: 1em;
+    height: 90%;
+}
+.pokemon-collection__title {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+}
+.pokemon-collection__button {
 
 }
-.pokemon-pick__button:hover,
-.pokemon-pick__button:focus {
+.pokemon-collection__button:hover,
+.pokemon-collection__button:focus {
     cursor: pointer;
     opacity: 0.5;
 }
-.pokemon-pick__name {
+.pokemon-collection__name {
     font-family: var(--font-title);
 }
 

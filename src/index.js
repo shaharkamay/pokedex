@@ -1,23 +1,28 @@
-const baseURL = "https://pokeapi.co/api/v2/";
+const baseURL2 = "https://pokeapi.co/api/v2/";
+const baseURL = 'http://localhost:8080/';
 let allPokemons= {};
 
 async function getData(url) {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+        headers: {
+            username: 'max',
+        }
+    });
     return response.data;
 }
 
 async function getPokemonByName(name) {
-    const pokemon = await getData(`${baseURL}pokemon/${name}`);
+    const pokemon = await getData(`${baseURL}pokemon/get/${name}`);
     return pokemon;
 }
 
 async function getPokemonById(id) {
-    const pokemon = await getData(`${baseURL}pokemon/${id}`);
+    const pokemon = await getData(`${baseURL}pokemon/get/${id}`);
     return pokemon;
 }
 
 async function getAllPokemons() {
-    const pokemons = await getData(`${baseURL}pokemon?limit=10000`);
+    const pokemons = await getData(`${baseURL2}pokemon?limit=10000`);
     return pokemons;
 }
 
@@ -27,7 +32,7 @@ async function getPokemonImgByName(name) {
 }
 
 async function getPokemonsByType(type) {
-    const pokemons = await getData(`${baseURL}type/${type}`);
+    const pokemons = await getData(`${baseURL2}type/${type}`);
     return pokemons.pokemon;
 }
 
@@ -35,7 +40,7 @@ function renderPokemonView(pokemon) {
     const pokemonName = document.getElementById("pokemon-view__name");
     pokemonName.textContent = pokemon.name;
     const pokemonImg = document.getElementById("pokemon-view__img");
-    pokemonImg.src = pokemon.sprites.front_default;
+    pokemonImg.src = pokemon.front_pic;
     const pokemonHeight = document.getElementById("pokemon-view__height");
     pokemonHeight.textContent = "Height: " + pokemon.height;
     const pokemonWeight = document.getElementById("pokemon-view__weight");
@@ -44,7 +49,7 @@ function renderPokemonView(pokemon) {
     removeChildren(pokemonTypes);
     pokemonTypes.append("types: ");
     for(const type of pokemon.types) {
-        pokemonTypes.append(createElement('button', [type["type"].name], ["button"], {}, {click: clickTypeEventHandler} ));
+        pokemonTypes.append(createElement('button', [type.name], ["button"], {}, {click: clickTypeEventHandler} ));
     }
 
 }
@@ -65,7 +70,8 @@ function changePokemonAngleImg() {
 
 (async () => {
     allPokemons = await getAllPokemons();
-    const pokemon = await getPokemonByName("bulbasaur");
+    const pokemon = await getPokemonById("1");
+    console.log(pokemon);
     renderPokemonView(pokemon);
     // filterPokemons();
     document.querySelector(".pokemon-view__img").addEventListener("mouseover", changePokemonAngleImg);
