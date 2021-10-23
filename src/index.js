@@ -164,8 +164,10 @@ const starter = async () => {
         displayMessage('Must sign in first!');
         return;
     }
+    const pokemons = await getUserPokemonsCollection(globalUsername);
+    if(!pokemons.status)
     allPokemons = await getAllPokemons();
-    const pokemon = await getPokemonByName("bulbasaur");
+    const pokemon = !pokemons.status ? pokemons[0] : null;
     if(!pokemon) {
         return;
     }
@@ -250,14 +252,6 @@ function signInEventHandler(e) {
     globalUsername = signInInput.value;
     console.log(globalUsername);
     starter();
-    // if(isNaN(signInInput.value)) renderResults(filterPokemons(searchInput.value));
-    // else {
-    //     await getPokemonById(searchInput.value).then((pokemon) => {
-    //         if(pokemon) {
-    //             if(pokemon.name) renderPokemonView(pokemon);
-    //         }
-    //     });
-    // }
 }
 
 async function renderResults(pokemons) {
@@ -267,13 +261,15 @@ async function renderResults(pokemons) {
     for(const pokemon of pokemons) {
         let resultDiv;
         if(pokemon["pokemon"]) {
-            const img = createElement('img', [], ["result__img"], {src: await getPokemonImgByName(pokemon["pokemon"].name)});
+            let img = "";
+            if(pokemons.length < 50) img = createElement('img', [], ["result__img"], {src: await getPokemonImgByName(pokemon["pokemon"].name)});
             
             const imgDiv = createElement('div', [img], ["result__img-div"]);
             const nameP = createElement('p', [pokemon["pokemon"].name], ["result__name", "pokemon-collection__name"]);
             resultDiv = createElement('div', [imgDiv, nameP], ["search__result", "row", "pokemon-collection__button"]);
         } else {
-            const img = createElement('img', [], ["result__img"], {src: await getPokemonImgByName(pokemon.name)});
+            let img = "";
+            if(pokemons.length < 50) img = createElement('img', [], ["result__img"], {src: await getPokemonImgByName(pokemon.name)});
             
             const imgDiv = createElement('div', [img], ["result__img-div"]);
             const nameP = createElement('p', [pokemon.name], ["result__name", "pokemon-collection__name"]);
