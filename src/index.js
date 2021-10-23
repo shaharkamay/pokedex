@@ -1,5 +1,6 @@
 const baseUrlPokeApi = "https://pokeapi.co/api/v2/";
 const baseURL = 'http://localhost:8080/';
+let globalUsername = null;
 let allPokemons= {};// fixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 async function getData(url, username) {
@@ -8,32 +9,53 @@ async function getData(url, username) {
             username,
         }
     });
+
+    if(response.data.status >= 400) {
+        displayMessage(response.data.message);
+    }
     return response.data;
 }
 
-async function setData(url, username) {
-    await axios.put(url, {
+async function putData(url, username) {
+    const response = await axios.put(url, {
         headers: {
             username,
         }
     })
+    if(response.data.status >= 400) {
+        displayMessage(response.data.message);
+    }
 }
 
 async function deleteData(url, username) {
-    await axios.delete(url, {
+    const response = await axios.delete(url, {
         headers: {
             username,
         }
     })
+    if(response.data.status >= 400) {
+        displayMessage(response.data.message);
+    }
+}
+
+async function postData(url, username = nul) {
+    const response = await axios.post(url, {
+        headers: {
+            username,
+        }
+    });
+    if(response.data.status >= 400) {
+        displayMessage(response.data.message);
+    }
 }
 
 async function getPokemonByName(name) {
-    const pokemon = await getData(`${baseURL}pokemon/query?name=${name}`, 'max');
+    const pokemon = await getData(`${baseURL}pokemon/query?name=${name}`, globalUsername);
     return pokemon;
 }
 
 async function getPokemonById(id) {
-    const pokemon = await getData(`${baseURL}pokemon/get/${id}`, 'max');
+    const pokemon = await getData(`${baseURL}pokemon/get/${id}`, globalUsername);
     return pokemon;
 }
 
@@ -44,12 +66,14 @@ async function getAllPokemons() { //fixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 async function getPokemonImgByName(name) {
     const pokemon = await getPokemonByName(name);
-    return pokemon.front_pic;
+    if(pokemon) return pokemon.front_pic;
+    return null;
 }
 
 async function getPokemonsByType(type) {
     const pokemons = await getData(`${baseUrlPokeApi}type/${type}`);
-    return pokemons.pokemon;
+    if(pokemons) return pokemons.pokemon;
+    return null;
 }
 
 async function getUserPokemonsCollection(username) {
@@ -59,6 +83,7 @@ async function getUserPokemonsCollection(username) {
 
 async function isPokemonExistsForUser(pokemonId, username) {
     const userPokemons = await getUserPokemonsCollection(username);
+    if(userPokemons.status) return false;
     for(const userPokemon of userPokemons) {
         if(pokemonId === userPokemon.id) {
             return true;
@@ -69,16 +94,21 @@ async function isPokemonExistsForUser(pokemonId, username) {
 
 async function catchPokemon(pokemonName, username) {
     const pokemon = await getPokemonByName(pokemonName);
-    await setData(`${baseURL}pokemon/catch/${pokemon.id}`, username);
+    if(pokemon) await putData(`${baseURL}pokemon/catch/${pokemon.id}`, username);
 }
 async function releasePokemon(pokemonName, username) {
     const pokemon = await getPokemonByName(pokemonName);
-    await deleteData(`${baseURL}pokemon/release/${pokemon.id}`, username);
+    if(pokemon) await deleteData(`${baseURL}pokemon/release/${pokemon.id}`, username);
+}
+
+async function signInSignUp(userName) {
+    await postData(`${baseURL}users/info`, userName);
 }
 
 function renderCollectionView(pokemons) {
     const pokemonCollection = document.getElementById("pokemon-collection");
     removeChildren(pokemonCollection);
+    if(pokemons.status) return;
     for(const pokemon of pokemons) {
         const pokemonName = createElement('p', [pokemon.name], ['pokemon-collection__name']);
         const pokemonImg = createElement('img', [], ['pokemon-collection__img'], { src: pokemon.front_pic });
@@ -104,7 +134,7 @@ async function renderPokemonView(pokemon) {
     }
     const pokemonAction = document.getElementById('pokemon-view__action');
     removeChildren(pokemonAction);
-    pokemonAction.append(createElement('button', [await isPokemonExistsForUser(pokemon.id, 'max') ? 'Release' : 'Catch'], ['button'], {}, {click: clickCatchReleaseHandler}));
+    pokemonAction.append(createElement('button', [await isPokemonExistsForUser(pokemon.id, globalUsername) ? 'Release' : 'Catch'], ['button'], {}, {click: clickCatchReleaseHandler}));
 
 }
 
@@ -122,22 +152,38 @@ function changePokemonAngleImg() {
 }
 
 
-(async () => {
-    allPokemons = await getAllPokemons();
-    const pokemon = await getPokemonByName("bulbasaur");
-    renderPokemonView(pokemon);
-    const pokemonsCollection = await getUserPokemonsCollection('max');
-    renderCollectionView(pokemonsCollection);
-    // filterPokemons();
-    document.querySelector(".pokemon-view__img").addEventListener("mouseover", changePokemonAngleImg);
-    document.querySelector(".pokemon-view__img").addEventListener("mouseout", changePokemonAngleImg);
+const starter = async () => {
     const searchInput = document.getElementById("search__input");
     searchInput.addEventListener("keyup", searchEventHandler);
     searchInput.value = "";
     document.getElementById("search-button").addEventListener("click", searchEventHandler);
 
+    document.getElementById("user-sign-in__input").addEventListener('keyup', signInEventHandler);
+    document.getElementById("user-sign-in__button").addEventListener("click", signInEventHandler);
+    if(!globalUsername) {
+        displayMessage('Must sign in first!');
+        return;
+    }
+    allPokemons = await getAllPokemons();
+    const pokemon = await getPokemonByName("bulbasaur");
+    if(!pokemon) {
+        return;
+    }
+    renderPokemonView(pokemon);
+    const pokemonsCollection = await getUserPokemonsCollection(globalUsername);
+    renderCollectionView(pokemonsCollection);
+    // filterPokemons();
+    document.querySelector(".pokemon-view__img").addEventListener("mouseover", changePokemonAngleImg);
+    document.querySelector(".pokemon-view__img").addEventListener("mouseout", changePokemonAngleImg);
+
     document.querySelector("aside").addEventListener("click", clickPokemonPickEventHandler);
-})();
+
+    document.getElementById('error__close').addEventListener('click', clickCloseErrorHandler);
+
+
+    document.querySelector('.errors').classList.remove('display-block');
+};
+starter();
 
 function filterPokemons(query) {
     const pokemons = [];
@@ -157,20 +203,19 @@ async function clickPokemonPickEventHandler(e) {
     const pokemonPickDiv = e.target.closest(".pokemon-collection__button");
     if(!pokemonPickDiv) return;
     const pokemon = await getPokemonByName(pokemonPickDiv.querySelector(".pokemon-collection__name").textContent);
-    renderPokemonView(pokemon);
-
+    if(pokemon) renderPokemonView(pokemon);
 }
 
 async function clickCatchReleaseHandler(e) {
     if(e.target.textContent === 'Catch') {
         const pokemonName = document.getElementById('pokemon-view__name').textContent;
-        await catchPokemon(pokemonName, 'max');
-        renderCollectionView(await getUserPokemonsCollection('max'));
+        await catchPokemon(pokemonName, globalUsername);
+        renderCollectionView(await getUserPokemonsCollection(globalUsername));
         e.target.textContent = 'Release';
     } else {
         const pokemonName = document.getElementById('pokemon-view__name').textContent;
-        await releasePokemon(pokemonName, 'max');
-        renderCollectionView(await getUserPokemonsCollection('max'));
+        await releasePokemon(pokemonName, globalUsername);
+        renderCollectionView(await getUserPokemonsCollection(globalUsername));
         e.target.textContent = 'Catch';
     }
 }
@@ -186,11 +231,33 @@ async function searchEventHandler(e) {
     if(isNaN(searchInput.value)) renderResults(filterPokemons(searchInput.value));
     else {
         await getPokemonById(searchInput.value).then((pokemon) => {
-            renderPokemonView(pokemon);
-        }, (err) => {
-            window.alert(`${err}\nPokemon Not Found!`);
+            if(pokemon) {
+                if(pokemon.name) renderPokemonView(pokemon);
+            }
         });
     }
+}
+
+function signInEventHandler(e) {
+    const signInInput = document.getElementById("user-sign-in__input");
+    if(e.target.tagName !== 'BUTTON') {
+        if(!signInInput.value) return;
+        if(e.key !== 'Enter') return;
+    }
+    if(!signInInput.value) return;
+    
+    signInSignUp(signInInput.value);
+    globalUsername = signInInput.value;
+    console.log(globalUsername);
+    starter();
+    // if(isNaN(signInInput.value)) renderResults(filterPokemons(searchInput.value));
+    // else {
+    //     await getPokemonById(searchInput.value).then((pokemon) => {
+    //         if(pokemon) {
+    //             if(pokemon.name) renderPokemonView(pokemon);
+    //         }
+    //     });
+    // }
 }
 
 async function renderResults(pokemons) {
@@ -294,4 +361,18 @@ function toggleLoader() {
 
         addOpacityToSections(header, main, footer);
     }
+}
+
+function displayMessage(message) {
+    const errorsSection = document.querySelector('.errors');
+    errorsSection.classList.add('display-block');
+    const errorMessageElem = document.querySelector('.error__message');
+    errorMessageElem.textContent = message;
+}
+
+function clickCloseErrorHandler(e) {
+    if(e.target.tagName !== 'BUTTON') return;
+
+    const errorsSection = document.querySelector('.errors');
+    errorsSection.classList.remove('display-block');
 }

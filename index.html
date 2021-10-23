@@ -6,19 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./images/Poke-Ball.ico">
     <link rel="stylesheet" href="./styles/styles.css">
+
     <title>Pokedex</title>
 </head>
 <body>
     <header>
         <div class="container row">
             <h1 class="title">Pokedex</h1>
-            <div class="search">
-                <input type="text" id="search__input" class="search__input" placeholder="🔎︎ Search...">
-                <button id="search-button" class="search__button">🔎︎</button>
+            <div class="inputs-div">
+                <div class="row search">
+                    <input type="text" id="search__input" class="search__input" placeholder="🔎︎ Search...">
+                    <button id="search-button" class="search__button">🔎︎</button>
+                </div>
+                <div class="row user-sign-in">
+                    <input type="text" id="user-sign-in__input" class="user-sign-in__input" placeholder="Enter Username">
+                    <button id="user-sign-in__button" class="user-sign-in__button">Sign In</button>
+                </div>
             </div>
         </div>
     </header>
-    
+
     <main>
         <div class="container col pokemon-interface row-large">
             <aside class="col">
@@ -35,14 +42,32 @@
             </section>
         </div>
     </main>
-
     <footer>
         <div class="container">
             <p class="copyright">© Copyright 2021 Shahar Kamay</p>
         </div>
+
+        <section class="errors display-none">
+            <div class="error">
+                <div class="error__header">
+                    <strong>Pokedex</strong>
+                    <button id="error__close">X</button>
+                </div>
+                <div class="error__body">
+                    <small class="error__message"></small>
+                </div>
+                <!-- <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <img src="./favicon (4).ico" class="rounded me-2" alt="..." />
+                        <strong class="me-auto">Pokedex</strong>
+                        <small>Just now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">X</button>
+                    </div>
+                    <div class="toast-body">Pokemon doesnt exist</div>
+                </div> -->
+            </div>
+        </section>
     </footer>
-
-
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./src/index.js"></script>

@@ -77,15 +77,34 @@ h1 {
     font-family: var(--font-title);
     color: var(--color-red-600);
 }
+.inputs-div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
 .search {
-
+    justify-content:flex-start !important;
 }
 .search__input {
+    width: 8em;
     max-width: 70%;
 }
 .search__button {
+    width: 4em;
     max-width: 30%;
 }
+.user-sign-in {
+    justify-content: flex-start !important;
+}
+.user-sign-in__input {
+    width: 8em;
+    max-width: 70%;
+}
+.user-sign-in__button {
+    width: 4em;
+    max-width: 30%;
+}
+
 
 .results-container {
     position: absolute;
@@ -225,6 +244,25 @@ footer {
 .loaderImg {
     width: 20%;
     z-index: 2;
+}
+
+.error {
+    position: absolute;
+    left: 1em;
+    bottom: 1em;
+    background-color: red;
+    padding: 0.5em
+}
+.error__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.display-none {
+    display: none;
+}
+.display-block {
+    display: block;
 }
 
 
