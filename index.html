@@ -21,29 +21,17 @@
     
     <main>
         <div class="container col pokemon-interface row-large">
-            <aside>
-                <h2 class="pokemon-collection__title">Collection</h1>
-                <div class="pokemon-collection col-large">
-                    <div class="pokemon-collection__button">
-                        <p class="pokemon-collection__name">tangrowth</p>
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/465.png" alt="" class="pokemon-collection__img">
-                    </div>
-                    <div class="pokemon-collection__button">
-                        <p class="pokemon-collection__name">bulbasaur</p>
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="" class="pokemon-collection__img">
-                    </div>
-                    <div class="pokemon-collection__button">
-                        <p class="pokemon-collection__name">raichu</p>
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/26.png" alt="" class="pokemon-collection__img">
-                    </div>
-                </div>
+            <aside class="col">
+                <h2 class="pokemon-interface__title">Collection</h1>
+                <div id="pokemon-collection" class="pokemon-collection col-large"></div>
             </aside>
             <section class="pokemon-view col-large">
                 <p id="pokemon-view__name" class="pokemon-view__name"></p>
                 <img id="pokemon-view__img" src="" alt="" class="pokemon-view__img">
-                <p id="pokemon-view__height" class="pokemon-view__height"></p>
-                <p id="pokemon-view__weight" class="pokemon-view__weight"></p>
-                <div id="pokemon-view__types" class="pokemon-view__types"></p>
+                <p id="pokemon-view__height" class="pokemon-view__height pokemon-view__prop"></p>
+                <p id="pokemon-view__weight" class="pokemon-view__weight pokemon-view__prop"></p>
+                <div id="pokemon-view__types" class="pokemon-view__types pokemon-view__prop"></div>
+                <div id="pokemon-view__action" class="pokemon-view__action pokemon-view__prop"></div>
             </section>
         </div>
     </main>

@@ -64,8 +64,7 @@ body {
     padding: 0.2em 1.5em;
     border-radius: 3px;
 }
-.button:hover,
-.button:focus {
+.button:hover {
     opacity: 0.75;
 }
 
@@ -141,8 +140,8 @@ main {
 }
 
 aside {
-    padding: 1em;
     width: 100%;
+    padding: 1em;
     order: 1;
     background-color: var(--color-cream-200);
     box-shadow: var(--box-shadow);
@@ -150,20 +149,16 @@ aside {
     text-align: center;
 }
 .pokemon-collection {
-    padding: 1em;
-    border: 2px solid rgba(0,0,0,0.2);
+    width: 100%;
     overflow: auto;
     display: flex;
     gap: 1em;
-    height: 90%;
 }
-.pokemon-collection__title {
+.pokemon-interface__title {
     font-family: var(--font-title);
     font-size: 1.5rem;
 }
-.pokemon-collection__button {
 
-}
 .pokemon-collection__button:hover,
 .pokemon-collection__button:focus {
     cursor: pointer;
@@ -186,7 +181,7 @@ aside {
     font-family: var(--font-title);
     font-size: 1.5rem;
 }
-.pokemon-view__height {
+.pokemon-view__prop {
     font-weight: bold;
     padding: 0.5em;
     background-color: var(--color-red-600);
@@ -194,23 +189,6 @@ aside {
     width: 100%;
     max-width: 250px;
     margin: 0 auto 0.5em;
-}
-.pokemon-view__weight {
-    font-weight: bold;
-    padding: 0.5em;
-    background-color: var(--color-red-600);
-    margin-bottom: 0.5em;
-    width: 100%;
-    max-width: 250px;
-    margin: 0 auto 0.5em;
-}
-.pokemon-view__types {
-    font-weight: bold;
-    padding: 0.5em;
-    background-color: var(--color-red-600);
-    width: 100%;
-    max-width: 250px;
-    margin: 0 auto;
 }
 .pokemon-view__types * {
     margin-right: 0.2em;
