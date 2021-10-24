@@ -4,10 +4,54 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./images/Poke-Ball.ico">
     <link rel="stylesheet" href="./styles/styles.css">
     <title>Pokedex</title>
 </head>
 <body>
+    <header>
+        <div class="container row">
+            <h1 class="title">Pokedex</h1>
+            <div class="search">
+                <input type="text" id="search__input" class="search__input" placeholder="🔎︎ Search...">
+                <button id="search-button" class="search__button">🔎︎</button>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container col pokemon-interface row-large">
+            <aside class="pokemon-pick col-large">
+                <div class="pokemon-pick__button">
+                    <p class="pokemon-pick__name">tangrowth</p>
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/465.png" alt="" class="pokemon-pick__img">
+                </div>
+                <div class="pokemon-pick__button">
+                    <p class="pokemon-pick__name">bulbasaur</p>
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="" class="pokemon-pick__img">
+                </div>
+                <div class="pokemon-pick__button">
+                    <p class="pokemon-pick__name">raichu</p>
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/26.png" alt="" class="pokemon-pick__img">
+                </div>
+            </aside>
+            <section class="pokemon-view col-large">
+                <p id="pokemon-view__name" class="pokemon-view__name"></p>
+                <img id="pokemon-view__img" src="" alt="" class="pokemon-view__img">
+                <p id="pokemon-view__height" class="pokemon-view__height"></p>
+                <p id="pokemon-view__weight" class="pokemon-view__weight"></p>
+                <div id="pokemon-view__types" class="pokemon-view__types"></p>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p class="copyright">© Copyright 2021 Shahar Kamay</p>
+        </div>
+    </footer>
+
+
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./src/index.js"></script>
