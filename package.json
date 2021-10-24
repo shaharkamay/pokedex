@@ -1,0 +1,30 @@
+{
+  "name": "pokedex",
+  "version": "1.0.0",
+  "description": "In this task you will build your own pokédex!\r Read,learn and use https://pokeapi.co/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaharkamay/pokedex.git"
+  },
+  "keywords": [],
+  "author": "Shahar Kamay <shahar.kamay@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shaharkamay/pokedex/issues"
+  },
+  "homepage": "https://github.com/shaharkamay/pokedex#readme",
+  "devDependencies": {
+    "css-loader": "^6.4.0",
+    "css-minimizer-webpack-plugin": "^3.1.1",
+    "html-webpack-plugin": "^5.4.0",
+    "mini-css-extract-plugin": "^2.4.3",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.59.1",
+    "webpack-cli": "^4.9.1"
+  }
+}
